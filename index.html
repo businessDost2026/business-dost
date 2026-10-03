@@ -3,9 +3,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Business Dost Smart App</title>
+    <title>Business Dost Smart App with Ads</title>
+    
+    <!-- Google AdMob / AdSense Script Integration -->
+    <script async src="https://googlesyndication.com" crossorigin="anonymous"></script>
+
     <style>
-        /* CSS variables for dynamic themes */
         :root {
             --primary: #1e3c72;
             --secondary: #2a5298;
@@ -16,7 +19,6 @@
             --result-bg: #eef2f7;
         }
         
-        /* Dark Theme Variables */
         [data-theme="dark"] {
             --primary: #0f2027;
             --secondary: #203a43;
@@ -27,7 +29,6 @@
             --result-bg: #2c3e50;
         }
 
-        /* Green Theme Variables */
         [data-theme="green"] {
             --primary: #11998e;
             --secondary: #38ef7d;
@@ -38,7 +39,6 @@
             --result-bg: #e8f5e9;
         }
 
-        /* Gold Theme Variables */
         [data-theme="gold"] {
             --primary: #d4af37;
             --secondary: #aa7c11;
@@ -50,12 +50,10 @@
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: all 0.3s ease; }
-        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); text-align: right; }
+        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); text-align: right; padding-bottom: 70px; }
         [lang="en"] body { text-align: left; }
         
-        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
-        
-        /* App Icon Design */
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .app-icon { width: 60px; height: 60px; background: white; border-radius: 15px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
         .app-icon span { font-size: 32px; }
 
@@ -68,51 +66,49 @@
         input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background-color: var(--card-bg); color: var(--text); }
         
         .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: 0; border-radius: 8px; padding: 12px 20px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .btn:hover { opacity: 0.9; }
-        
         .result-box { background: var(--result-bg); border-right: 5px solid var(--primary); padding: 15px; border-radius: 6px; margin-top: 15px; display: none; font-size: 15px; line-height: 1.6; }
         [lang="en"] .result-box { border-right: 0; border-left: 5px solid var(--primary); }
-        
-        .theme-options, .lang-options { display: flex; gap: 10px; margin-bottom: 15px; }
+
+        .theme-options { display: flex; gap: 10px; margin-top: 10px; }
         .theme-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-        
+
         .idea-list { list-style: none; padding: 0; margin: 0; }
         .idea-item { background: var(--result-bg); padding: 12px; margin-bottom: 8px; border-radius: 6px; border-right: 3px solid var(--primary); font-size: 14px; }
         [lang="en"] .idea-item { border-right: 0; border-left: 3px solid var(--primary); }
+
+        /* 📱 GOOGLE ADS BANNER DESIGN */
+        .ad-container { position: fixed; bottom: 0; left: 0; width: 100%; background: #eee; text-align: center; padding: 5px 0; box-shadow: 0 -2px 5px rgba(0,0,0,0.1); z-index: 9999; }
+        .ad-label { font-size: 10px; color: #666; margin: 0; text-align: center; display: block; }
+        .mock-ad { background: #333; color: #fff; padding: 12px; font-size: 14px; font-weight: bold; display: block; max-width: 320px; margin: 0 auto; border-radius: 4px; text-decoration: none; }
     </style>
 </head>
 <body>
 
     <header>
-        <!-- App Logo/Icon -->
-        <div class="app-icon">
-            <span>💼</span>
-        </div>
+        <div class="app-icon"><span>💼</span></div>
         <h1 id="appTitle">بزنس دوست (Business Dost)</h1>
         <p id="appSubtitle" style="margin: 5px 0 0;">آپ کا ذاتی کاروباری مشیر اور پلانر</p>
     </header>
 
     <main>
-        <!-- ⚙️ SETTINGS CARD -->
+        <!--⚙️ SETTINGS CARD -->
         <div class="card">
             <h2 id="settHeading">⚙️ ایپ کی ترتیبات (Settings)</h2>
-            
             <label id="langLabel">زبان منتخب کریں / Select Language:</label>
-            <div class="lang-options">
+            <div style="display:flex; gap:10px;">
                 <button class="btn" style="width: auto; padding: 8px 15px;" onclick="changeLang('ur')">اردو</button>
                 <button class="btn" style="width: auto; padding: 8px 15px; background: #555;" onclick="changeLang('en')">English</button>
             </div>
-
-            <label id="themeLabel">اپنا پسندیدہ تھیم منتخب کریں:</label>
+            <label id="themeLabel" style="margin-top:15px;">اپنا پسندیدہ تھیم منتخب کریں:</label>
             <div class="theme-options">
-                <div class="theme-btn" style="background: #1e3c72;" onclick="changeTheme('default')" title="Blue"></div>
-                <div class="theme-btn" style="background: #222;" onclick="changeTheme('dark')" title="Dark"></div>
-                <div class="theme-btn" style="background: #11998e;" onclick="changeTheme('green')" title="Green"></div>
-                <div class="theme-btn" style="background: #d4af37;" onclick="changeTheme('gold')" title="Gold"></div>
+                <div class="theme-btn" style="background: #1e3c72;" onclick="changeTheme('default')"></div>
+                <div class="theme-btn" style="background: #222;" onclick="changeTheme('dark')"></div>
+                <div class="theme-btn" style="background: #11998e;" onclick="changeTheme('green')"></div>
+                <div class="theme-btn" style="background: #d4af37;" onclick="changeTheme('gold')"></div>
             </div>
         </div>
 
-        <!-- 1. SMART ADVISOR -->
+        <!-- 🤖 SMART ADVISOR -->
         <div class="card">
             <h2 id="advHeading">🤖 اسمارٹ بزنس ایڈوائزر</h2>
             <label id="budgetLabel">اپنا کل بجٹ (روپے میں) لکھیں:</label>
@@ -129,7 +125,7 @@
             <div id="advisorResult" class="result-box"></div>
         </div>
 
-        <!-- 2. PROFIT CALCULATOR -->
+        <!-- 📊 PROFIT CALCULATOR -->
         <div class="card">
             <h2 id="calcHeading">📊 منافع کیلکولیٹر</h2>
             <label id="costLabel">کل لاگت / انویسٹمنٹ (روپے):</label>
@@ -142,7 +138,7 @@
             <div id="calculatorResult" class="result-box"></div>
         </div>
 
-        <!-- 3. IDEA LIBRARY -->
+        <!-- 📚 IDEA LIBRARY -->
         <div class="card">
             <h2 id="libHeading">📚 بزنس آئیڈیا لائبریری</h2>
             <ul class="idea-list" id="ideaList">
@@ -153,20 +149,32 @@
         </div>
     </main>
 
+    <!-- 🌐 GOOGLE ADMOB BANNER PLACEHOLDER -->
+    <div class="ad-container">
+        <span class="ad-label">ADVERTISEMENT</span>
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="YYYYYYYYYYYY"></ins>
+        <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+        <div class="mock-ad" id="mockAd">گوگل ایڈز سے کمائی کا ایریا 💰</div>
+    </div>
+
     <script>
-        // Dictionary for Language Toggle
         const data = {
             ur: {
-                title: "💼 بزنس دوست (Business Dost)", subtitle: "آپ کا ذاتی کاروباری مشیر اور پلانر",
+                title: "بزنس دوست (Business Dost)", subtitle: "آپ کا ذاتی کاروباری مشیر اور planner",
                 sett: "⚙️ ایپ کی ترتیبات (Settings)", langL: "زبان منتخب کریں / Select Language:", themeL: "اپنا پسندیدہ تھیم منتخب کریں:",
                 advH: "🤖 اسمارٹ بزنس ایڈوائزر", budgetL: "اپنا کل بجٹ (روپے میں) لکھیں:", expL: "اپنا کاروباری تجربہ منتخب کریں:",
                 expN: "کوئی تجربہ نہیں (بالکل نئے ہیں)", expB: "بنیادی سمجھ بوجھ ہے", expE: "اچھا خاصا تجربہ ہے", advB: "مشورہ حاصل کریں",
                 calcH: "📊 منافع کیلکولیٹر", costL: "کل لاگت / انویسٹمنٹ (روپے):", revL: "متوقع ماہانہ سیلز / آمدنی (روپے):", calcB: "منافع چیک کریں",
-                libH: "📚 بزنس آئیڈیا لائبریری",
+                libH: "📚 بزنس آئیڈیا لائبریری", mock: "گوگل ایڈز سے کمائی کا ایریا 💰",
                 ideas: [
                     "<strong>کم بجٹ:</strong> آن لائن کنٹینٹ رائٹنگ، گرافک ڈیزائننگ یا لوکل پروڈکٹ ری سیلنگ۔",
                     "<strong>درمیانہ بجٹ:</strong> کپڑوں کا آن لائن برانڈ، ہوم میڈ فوڈ ڈلیوری یا فاسٹ فوڈ اسٹال۔",
                     "<strong>بڑا بجٹ:</strong> ای کامرس اسٹور (Shopify)، ہول سیل مارکیٹ یا منی سپر مارکیٹ۔"
                 ]
-
-        
+            },
+            en: {
+                title: "Business Dost", subtitle: "Your Personal Business Advisor & Planner",
+                sett: "⚙️ App Settings", langL: "Select Language / زبان منتخب کریں:", themeL: "Choose Your Favorite Theme:",

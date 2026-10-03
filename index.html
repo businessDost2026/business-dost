@@ -3,156 +3,183 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Business Dost V11</title>
+    <title>Business Dost Smart App</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { margin: 0; padding: 0; background-color: #f4f6f9; color: #333; text-align: right; }
-        header { background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* CSS variables for dynamic themes */
+        :root {
+            --primary: #1e3c72;
+            --secondary: #2a5298;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --border: #eeeeee;
+            --result-bg: #eef2f7;
+        }
+        
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --primary: #0f2027;
+            --secondary: #203a43;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #ffffff;
+            --border: #333333;
+            --result-bg: #2c3e50;
+        }
+
+        /* Green Theme Variables */
+        [data-theme="green"] {
+            --primary: #11998e;
+            --secondary: #38ef7d;
+            --bg: #f0f4f1;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --border: #e2ebd5;
+            --result-bg: #e8f5e9;
+        }
+
+        /* Gold Theme Variables */
+        [data-theme="gold"] {
+            --primary: #d4af37;
+            --secondary: #aa7c11;
+            --bg: #faf7f0;
+            --card-bg: #ffffff;
+            --text: #4a3b00;
+            --border: #f0e6cc;
+            --result-bg: #fdfaf2;
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: all 0.3s ease; }
+        body { margin: 0; padding: 0; background-color: var(--bg); color: var(--text); text-align: right; }
+        [lang="en"] body { text-align: left; }
+        
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
+        
+        /* App Icon Design */
+        .app-icon { width: 60px; height: 60px; background: white; border-radius: 15px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .app-icon span { font-size: 32px; }
+
         h1 { margin: 0; font-size: 24px; }
         main { padding: 15px; max-width: 600px; margin: 0 auto; }
-        .card { background: #fff; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        h2 { color: #1e3c72; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-top: 0; font-size: 18px; }
-        label { display: block; margin: 10px 0 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background-color: #fafafa; }
-        .btn { background: #2a5298; color: white; border: 0; border-radius: 8px; padding: 12px 20px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.3s; }
-        .btn:hover { background: #1e3c72; }
-        .result-box { background: #eef2f7; border-right: 5px solid #2a5298; padding: 15px; border-radius: 6px; margin-top: 15px; display: none; font-size: 15px; line-height: 1.6; }
-        .idea-list { list-style: none; padding: 0; }
-        .idea-item { background: #f9f9f9; padding: 12px; margin-bottom: 8px; border-radius: 6px; border-right: 3px solid #4ca1af; font-size: 14px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+        h2 { color: var(--primary); border-bottom: 2px solid var(--border); padding-bottom: 8px; margin-top: 0; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+        
+        label { display: block; margin: 10px 0 5px; font-weight: bold; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background-color: var(--card-bg); color: var(--text); }
+        
+        .btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: 0; border-radius: 8px; padding: 12px 20px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .btn:hover { opacity: 0.9; }
+        
+        .result-box { background: var(--result-bg); border-right: 5px solid var(--primary); padding: 15px; border-radius: 6px; margin-top: 15px; display: none; font-size: 15px; line-height: 1.6; }
+        [lang="en"] .result-box { border-right: 0; border-left: 5px solid var(--primary); }
+        
+        .theme-options, .lang-options { display: flex; gap: 10px; margin-bottom: 15px; }
+        .theme-btn { width: 35px; height: 35px; border-radius: 50%; border: 2px solid white; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        
+        .idea-list { list-style: none; padding: 0; margin: 0; }
+        .idea-item { background: var(--result-bg); padding: 12px; margin-bottom: 8px; border-radius: 6px; border-right: 3px solid var(--primary); font-size: 14px; }
+        [lang="en"] .idea-item { border-right: 0; border-left: 3px solid var(--primary); }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>💼 بزنس دوست (Business Dost)</h1>
-        <p style="margin: 5px 0 0;">آپ کا ذاتی کاروباری مشیر اور پلانر</p>
+        <!-- App Logo/Icon -->
+        <div class="app-icon">
+            <span>💼</span>
+        </div>
+        <h1 id="appTitle">بزنس دوست (Business Dost)</h1>
+        <p id="appSubtitle" style="margin: 5px 0 0;">آپ کا ذاتی کاروباری مشیر اور پلانر</p>
     </header>
 
     <main>
-        <!-- 1. Smart Business Advisor -->
+        <!-- ⚙️ SETTINGS CARD -->
         <div class="card">
-            <h2>🤖 اسمارٹ بزنس ایڈوائزر</h2>
-            <label>اپنا کل بجٹ (روپے میں) لکھیں:</label>
+            <h2 id="settHeading">⚙️ ایپ کی ترتیبات (Settings)</h2>
+            
+            <label id="langLabel">زبان منتخب کریں / Select Language:</label>
+            <div class="lang-options">
+                <button class="btn" style="width: auto; padding: 8px 15px;" onclick="changeLang('ur')">اردو</button>
+                <button class="btn" style="width: auto; padding: 8px 15px; background: #555;" onclick="changeLang('en')">English</button>
+            </div>
+
+            <label id="themeLabel">اپنا پسندیدہ تھیم منتخب کریں:</label>
+            <div class="theme-options">
+                <div class="theme-btn" style="background: #1e3c72;" onclick="changeTheme('default')" title="Blue"></div>
+                <div class="theme-btn" style="background: #222;" onclick="changeTheme('dark')" title="Dark"></div>
+                <div class="theme-btn" style="background: #11998e;" onclick="changeTheme('green')" title="Green"></div>
+                <div class="theme-btn" style="background: #d4af37;" onclick="changeTheme('gold')" title="Gold"></div>
+            </div>
+        </div>
+
+        <!-- 1. SMART ADVISOR -->
+        <div class="card">
+            <h2 id="advHeading">🤖 اسمارٹ بزنس ایڈوائزر</h2>
+            <label id="budgetLabel">اپنا کل بجٹ (روپے میں) لکھیں:</label>
             <input type="number" id="budgetInput" placeholder="مثلاً: 50000">
 
-            <label>اپنا کاروباری تجربہ منتخب کریں:</label>
+            <label id="expLabel">اپنا کاروباری تجربہ منتخب کریں:</label>
             <select id="experienceSelect">
-                <option value="none">کوئی تجربہ نہیں (بالکل نئے ہیں)</option>
-                <option value="basic">بنیادی سمجھ بوجھ ہے</option>
-                <option value="expert">اچھا خاصا تجربہ ہے</option>
+                <option value="none" id="expNone">کوئی تجربہ نہیں (بالکل نئے ہیں)</option>
+                <option value="basic" id="expBasic">بنیادی سمجھ بوجھ ہے</option>
+                <option value="expert" id="expExpert">اچھا خاصا تجربہ ہے</option>
             </select>
 
-            <button class="btn" onclick="getAdvice()">مشورہ حاصل کریں</button>
+            <button class="btn" id="advBtn" onclick="getAdvice()">مشورہ حاصل کریں</button>
             <div id="advisorResult" class="result-box"></div>
         </div>
 
-        <!-- 2. Profit Calculator -->
+        <!-- 2. PROFIT CALCULATOR -->
         <div class="card">
-            <h2>📊 منافع کیلکولیٹر (Profit Calculator)</h2>
-            <label>کل لاگت / انویسٹمنٹ (روپے):</label>
+            <h2 id="calcHeading">📊 منافع کیلکولیٹر</h2>
+            <label id="costLabel">کل لاگت / انویسٹمنٹ (روپے):</label>
             <input type="number" id="costInput" placeholder="مثلاً: 20000">
 
-            <label>متوقع ماہانہ سیلز / آمدنی (روپے):</label>
+            <label id="revLabel">متوقع ماہانہ سیلز / آمدنی (روپے):</label>
             <input type="number" id="revenueInput" placeholder="مثلاً: 35000">
 
-            <button class="btn" onclick="calculateProfit()">منافع چیک کریں</button>
+            <button class="btn" id="calcBtn" onclick="calculateProfit()">منافع چیک کریں</button>
             <div id="calculatorResult" class="result-box"></div>
         </div>
 
-        <!-- 3. Business Idea Library -->
+        <!-- 3. IDEA LIBRARY -->
         <div class="card">
-            <h2>📚 بزنس آئیڈیا لائبریری</h2>
-            <p style="font-size: 14px; color: #666;">مختلف بجٹ کے حساب سے بہترین آئیڈیاز:</p>
-            <ul class="idea-list">
-                <li class="idea-item"><strong>کم بجٹ (10,000 تک):</strong> آن لائن کنٹینٹ رائٹنگ، گرافک ڈیزائننگ، یا موبائل اسیسریز کی آن لائن سیلز۔</li>
-                <li class="idea-item"><strong>درمیانہ بجٹ (50,000 تک):</strong> کپڑوں کا آن لائن ری سیلنگ بزنس، ہوم میڈ فوڈ ڈلیوری، یا فاسٹ فوڈ اسٹال۔</li>
-                <li class="idea-item"><strong>بڑا بجٹ (1 لاکھ سے اوپر):</strong> ای کامرس اسٹور (Shopify)، ہول سیل ڈسٹری بیوشن، یا منی سپر مارکیٹ۔</li>
+            <h2 id="libHeading">📚 بزنس آئیڈیا لائبریری</h2>
+            <ul class="idea-list" id="ideaList">
+                <li class="idea-item"><strong>کم بجٹ:</strong> آن لائن کنٹینٹ رائٹنگ، گرافک ڈیزائننگ یا لوکل پروڈکٹ ری سیلنگ۔</li>
+                <li class="idea-item"><strong>درمیانہ بجٹ:</strong> کپڑوں کا آن لائن برانڈ، ہوم میڈ فوڈ ڈلیوری یا فاسٹ فوڈ اسٹال۔</li>
+                <li class="idea-item"><strong>بڑا بجٹ:</strong> ای کامرس اسٹور (Shopify)، ہول سیل مارکیٹ یا منی سپر مارکیٹ۔</li>
             </ul>
-        </div>
-
-        <!-- 4. Business Journey Game -->
-        <div class="card">
-            <h2>🎮 بزنس جرنی گیم (کوئز)</h2>
-            <p id="gameQuestion">سوال: اگر آپ کا گاہک آپ کی سروس سے ناخوش ہو، تو آپ کیا کریں گے؟</p>
-            <select id="gameAnswer">
-                <option value="wrong1">اس سے بحث کریں گے اور اپنی غلطی نہیں مانیں گے۔</option>
-                <option value="correct">معذرت کریں گے اور اس کا مسئلہ فوراً حل کریں گے۔</option>
-                <option value="wrong2">اس گاہک کو نظر انداز کر دیں گے۔</option>
-            </select>
-            <button class="btn" onclick="playGame()">جواب چیک کریں</button>
-            <div id="gameResult" class="result-box"></div>
         </div>
     </main>
 
     <script>
-        // Advisor Logic
-        function getAdvice() {
-            var budget = document.getElementById('budgetInput').value;
-            var exp = document.getElementById('experienceSelect').value;
-            var result = document.getElementById('advisorResult');
-            
-            if(!budget) {
-                alert('براہ کرم پہلے بجٹ درج کریں!');
-                return;
+        // Dictionary for Language Toggle
+        const data = {
+            ur: {
+                title: "💼 بزنس دوست (Business Dost)", subtitle: "آپ کا ذاتی کاروباری مشیر اور پلانر",
+                sett: "⚙️ ایپ کی ترتیبات (Settings)", langL: "زبان منتخب کریں / Select Language:", themeL: "اپنا پسندیدہ تھیم منتخب کریں:",
+                advH: "🤖 اسمارٹ بزنس ایڈوائزر", budgetL: "اپنا کل بجٹ (روپے میں) لکھیں:", expL: "اپنا کاروباری تجربہ منتخب کریں:",
+                expN: "کوئی تجربہ نہیں (بالکل نئے ہیں)", expB: "بنیادی سمجھ بوجھ ہے", expE: "اچھا خاصا تجربہ ہے", advB: "مشورہ حاصل کریں",
+                calcH: "📊 منافع کیلکولیٹر", costL: "کل لاگت / انویسٹمنٹ (روپے):", revL: "متوقع ماہانہ سیلز / آمدنی (روپے):", calcB: "منافع چیک کریں",
+                libH: "📚 بزنس آئیڈیا لائبریری",
+                ideas: [
+                    "<strong>کم بجٹ:</strong> آن لائن کنٹینٹ رائٹنگ، گرافک ڈیزائننگ یا لوکل پروڈکٹ ری سیلنگ۔",
+                    "<strong>درمیانہ بجٹ:</strong> کپڑوں کا آن لائن برانڈ، ہوم میڈ فوڈ ڈلیوری یا فاسٹ فوڈ اسٹال۔",
+                    "<strong>بڑا بجٹ:</strong> ای کامرس اسٹور (Shopify)، ہول سیل مارکیٹ یا منی سپر مارکیٹ۔"
+                ]
+            },
+            en: {
+                title: "💼 Business Dost", subtitle: "Your Personal Business Advisor & Planner",
+                sett: "⚙️ App Settings", langL: "Select Language / زبان منتخب کریں:", themeL: "Choose Your Favorite Theme:",
+                advH: "🤖 Smart Business Advisor", budgetL: "Enter Your Total Budget (PKR):", expL: "Select Your Business Experience:",
+                expN: "No Experience (Beginner)", expB: "Basic Understanding", expE: "Expert / Experienced", advB: "Get Expert Advice",
+                calcH: "📊 Profit Calculator", costL: "Total Investment / Cost (PKR):", revL: "Expected Monthly Revenue (PKR):", calcB: "Check Profitability",
+                libH: "📚 Business Idea Library",
+                ideas: [
+                    "<strong>Low Budget:</strong> Content Writing, Freelance Design, or Reselling Products.",
+                    "<strong>Medium Budget:</strong> Online Clothing Brand, Home Food Delivery, or Food Stall.",
+                    "<strong>High Budget:</strong> E-commerce Store (Shopify), Wholesale Dealership, or Mini Supermarket."
+                ]
             }
-
-            var text = "";
-            if (budget < 20000) {
-                text = "<strong>مشورہ:</strong> آپ کا بجٹ کم ہے۔ آپ کو ڈیجیٹل اسکلز (فری لانسنگ) یا کسی پروڈکٹ کی ری سیلنگ (لوکل مارکیٹ سے لے کر آن لائن بیچنا) سے شروع کرنا چاہیے۔";
-            } else if (budget >= 20000 && budget <= 100000) {
-                text = "<strong>مشورہ:</strong> یہ درمیانہ بجٹ ہے۔ آپ ایک اچھا فوڈ اسٹال، کپڑوں کا آن لائن برانڈ، یا ہوم میڈ پروڈکٹس کا بزنس شروع کر سکتے ہیں۔";
-            } else {
-                text = "<strong>مشورہ:</strong> بہترین بجٹ ہے! آپ ایک پروفیشنل ای کامرس ویب سائٹ بنا سکتے ہیں، ہول سیل کا کام شروع کر سکتے ہیں، یا کوئی فرنچائز لے سکتے ہیں۔";
-            }
-
-            if(exp === "none") {
-                text += "<br><br>⚠️ چونکہ آپ کا تجربہ نہیں ہے، اس لیے شروع میں پوری رقم انویسٹ نہ کریں، پہلے کام کو سیکھیں۔";
-            }
-
-            result.innerHTML = text;
-            result.style.display = "block";
-        }
-
-        // Calculator Logic
-        function calculateProfit() {
-            var cost = parseFloat(document.getElementById('costInput').value);
-            var revenue = parseFloat(document.getElementById('revenueInput').value);
-            var result = document.getElementById('calculatorResult');
-
-            if(!cost || !revenue) {
-                alert('براہ کرم لاگت اور آمدنی دونوں درج کریں!');
-                return;
-            }
-
-            var profit = revenue - cost;
-            var roi = ((profit / cost) * 100).toFixed(1);
-
-            if(profit > 0) {
-                result.innerHTML = "🎉 <strong>مبارک ہو! منافع ہو رہا ہے۔</strong><br>صاف منافع: " + profit + " روپے<br>انویسٹمنٹ پر واپسی (ROI): " + roi + "%";
-                result.style.style.borderRightColor = "#2a5298";
-            } else if(profit === 0) {
-                result.innerHTML = "😐 <strong>برابر پر ہیں!</strong><br>نہ منافع ہوا نہ نقصان۔ لاگت پوری ہو گئی ہے۔";
-            } else {
-                result.innerHTML = "❌ <strong>نقصان ہو رہا ہے!</strong><br>نقصان کی رقم: " + Math.abs(profit) + " روپے<br>براہ کرم اپنی لاگت کم کرنے کی کوشش کریں۔";
-                result.style.borderRightColor = "#ff4d4d";
-            }
-            result.style.display = "block";
-        }
-
-        // Game Logic
-        function playGame() {
-            var answer = document.getElementById('gameAnswer').value;
-            var result = document.getElementById('gameResult');
-
-            if(answer === "correct") {
-                result.innerHTML = "🌟 <strong>شاندار جواب!</strong> بزنس میں گاہک ہمیشہ صحیح ہوتا ہے۔ اس رویے سے آپ کا بزنس بہت ترقی کرے گا۔";
-                result.style.borderRightColor = "#4ca1af";
-            } else {
-                result.innerHTML = "❌ <strong>غلط جواب!</strong> ایسا کرنے سے آپ کا گاہک ٹوٹ جائے گا اور مارکیٹ میں نام خراب ہوگا۔ دوبارہ کوشش کریں۔";
-                result.style.borderRightColor = "#ff4d4d";
-            }
-            result.style.display = "block";
-        }
-    </script>
-</body>
-</html>
+        };

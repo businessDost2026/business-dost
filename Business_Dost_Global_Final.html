@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Business Dost — Global Edition</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Tahoma,sans-serif;background:#f5f7fb;color:#172033}
+button,input,select{font:inherit} .app{max-width:650px;margin:auto;min-height:100vh;background:#fff}
+header{background:linear-gradient(135deg,#1267e8,#6236e8);color:#fff;padding:24px 18px 22px;border-radius:0 0 26px 26px}
+header h1{margin:0 0 7px;font-size:28px} header p{margin:0;opacity:.9}
+main{padding:16px 14px 88px}.screen{display:none}.screen.active{display:block}
+.card{background:#fff;border:1px solid #e5e9f2;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 14px #1720330b}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{padding:16px;border:0;border-radius:16px;background:#f2f6ff;text-align:right;cursor:pointer}.tile b{display:block;margin-top:7px}
+.btn{border:0;border-radius:12px;padding:12px 15px;background:#1267e8;color:#fff;cursor:pointer;font-weight:700}.btn.alt{background:#eef2f8;color:#172033}.btn.green{background:#149447}.btn.red{background:#d94b4b}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d7ddea;border-radius:12px;background:#fff;margin:6px 0 10px;outline:none}
+label{font-weight:700;font-size:14px}.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+.badge{display:inline-block;background:#eef3ff;color:#315bb8;padding:5px 9px;border-radius:20px;font-size:12px;margin:2px}
+.nav{position:fixed;bottom:0;left:0;right:0;max-width:650px;margin:auto;background:#fff;border-top:1px solid #e5e9f2;display:grid;grid-template-columns:repeat(5,1fr);padding:7px 4px;z-index:5}
+.nav button{border:0;background:none;padding:7px 2px;font-size:12px;color:#68738a;cursor:pointer}.nav button.active{color:#1267e8;font-weight:700}
+.business{cursor:pointer}.business h3{margin:5px 0}.muted{color:#68738a;font-size:13px}.price{font-weight:800;color:#149447}
+.result{background:#f7f9fc;border-radius:14px;padding:13px;margin-top:10px}.bar{height:10px;background:#e8edf5;border-radius:10px;overflow:hidden}.bar span{display:block;height:100%;background:#1267e8}
+.choice{width:100%;text-align:right;border:1px solid #dce2ed;background:#fff;border-radius:13px;padding:12px;margin:5px 0;cursor:pointer}.choice:hover{background:#f1f5ff}
+.small{font-size:12px}.center{text-align:center}.danger{color:#c53d3d}.success{color:#087a39}
+
+/* Business Dost global settings, splash screen and responsive polish */
+header{position:relative;padding-right:68px}
+.settings-open{position:absolute;right:16px;top:18px;width:42px;height:42px;border:1px solid #ffffff55;border-radius:13px;background:#ffffff1c;color:#fff;font-size:21px;cursor:pointer}
+#splash{position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 35%,#173e86,#07152f 72%);color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;transition:opacity .35s ease}
+#splash.hide{opacity:0;pointer-events:none}.splash-inner{width:min(86%,360px)}
+.brand-mark{width:112px;height:112px;margin:0 auto 18px;filter:drop-shadow(0 8px 22px #00d99a33)}
+.brand-name{font-size:30px;font-weight:800;letter-spacing:-.8px}.brand-name span{color:#28e0a0}.splash-tag{color:#c9d7f6;margin:10px 0 30px}.loader-track{height:7px;background:#ffffff24;border-radius:99px;overflow:hidden;margin:0 auto 12px;max-width:250px}.loader-track span{display:block;height:100%;width:35%;border-radius:99px;background:linear-gradient(90deg,#24e0a0,#2678ff);animation:loadrun 1.45s ease-in-out infinite alternate}@keyframes loadrun{from{width:8%}to{width:100%}}
+.modal-backdrop{position:fixed;inset:0;background:#07152f99;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px}.modal-backdrop.open{display:flex}.settings-panel{background:#fff;color:#172033;width:min(100%,440px);max-height:88vh;overflow:auto;border-radius:22px;padding:20px;box-shadow:0 20px 70px #06122b55}.settings-panel h2{margin-top:0}.settings-head{display:flex;justify-content:space-between;align-items:center}.close-settings{border:0;border-radius:10px;background:#eef2f8;padding:8px 12px;cursor:pointer}.settings-note{font-size:12px;color:#68738a;line-height:1.5}.settings-panel .btn{width:100%}.settings-panel select{margin-top:8px}
+body.dark{background:#0d1424;color:#e8eefb}body.dark .app,body.dark .card,body.dark .settings-panel,body.dark input,body.dark select,body.dark textarea{background:#151f33;color:#e8eefb;border-color:#2c3b56}body.dark .tile,body.dark .result,body.dark .choice{background:#202d45;color:#e8eefb;border-color:#2c3b56}body.dark .nav{background:#151f33;border-color:#2c3b56}body.dark .btn.alt{background:#273650;color:#e8eefb}
+@media(max-width:380px){.brand-name{font-size:26px}.brand-mark{width:94px;height:94px}.settings-open{right:12px}}
+</style>
+</head>
+<body>
+<div id="splash" aria-label="Business Dost loading screen"><div class="splash-inner">
+<svg class="brand-mark" viewBox="0 0 120 120" role="img" aria-label="Business Dost logo"><defs><linearGradient id="bdg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#25e0a0"/><stop offset="1" stop-color="#2485ff"/></linearGradient></defs><rect x="8" y="8" width="104" height="104" rx="30" fill="#ffffff" fill-opacity=".08" stroke="#ffffff" stroke-opacity=".18"/><path d="M38 27h27c18 0 28 10 28 24 0 9-5 16-13 20 10 3 16 11 16 21 0 14-11 23-29 23H38V27zm19 16v21h8c7 0 11-4 11-11s-4-10-11-10h-8zm0 37v19h10c8 0 12-3 12-10s-5-9-12-9H57z" fill="#fff" transform="translate(-4 -7) scale(.88)"/><path d="M22 88h18V72h14V57h14V43h17" fill="none" stroke="url(#bdg)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M76 34h18v18" fill="none" stroke="#28e0a0" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div class="brand-name">Business <span>Dost</span></div><p class="splash-tag" id="splashTag">Your Business Journey Starts Here</p><div class="loader-track"><span></span></div><div id="loadingText">Loading your business tools…</div>
+</div></div>
+<div class="app">
+<header><button class="settings-open" type="button" onclick="openSettings()" aria-label="Settings" title="Settings">⚙</button><h1>💼 Business Dost</h1><p id="tagline">کاروبار تلاش کریں، سمجھیں، پلان بنائیں اور سیکھیں</p></header>
+<div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" onclick="if(event.target===this)closeSettings()"><div class="settings-panel"><div class="settings-head"><h2 id="settingsTitle">⚙ Settings</h2><button class="close-settings" type="button" onclick="closeSettings()" aria-label="Close">✕</button></div>
+<label for="languageSelect" id="languageLabel">App language</label><select id="languageSelect"><option value="en">🇬🇧 English</option><option value="ur">🇵🇰 اردو (Urdu)</option><option value="es">🇪🇸 Español (Spanish)</option><option value="ar">🇸🇦 العربية (Arabic)</option><option value="fr">🇫🇷 Français (French)</option><option value="de">🇩🇪 Deutsch (German)</option><option value="tr">🇹🇷 Türkçe (Turkish)</option></select>
+<label for="themeSelect" id="themeLabel">Appearance</label><select id="themeSelect"><option value="light">☀️ Light mode</option><option value="dark">🌙 Dark mode</option></select>
+<p class="settings-note" id="settingsNote">Your language and appearance preferences are saved on this device.</p><button class="btn" type="button" onclick="saveSettings()" id="saveSettingsBtn">Save settings</button></div></div>
+<main>
+
+<section id="home" class="screen active">
+<div class="card"><h2 id="welcomeTitle">👋 خوش آمدید!</h2><p id="welcomePrompt">آپ کس چیز سے شروع کرنا چاہتے ہیں؟</p>
+<div class="grid">
+<button class="tile" onclick="show('library')">🔎<b>کاروبار تلاش کریں</b><span class="muted">بڑی Business Library</span></button>
+<button class="tile" onclick="show('advisor')">🤖<b>Smart Advisor</b><span class="muted">آپ کے بجٹ کے مطابق</span></button>
+<button class="tile" onclick="show('plan')">📋<b>Business Plan</b><span class="muted">اپنا پلان بنائیں</span></button>
+<button class="tile" onclick="show('profit')">💰<b>Profit Calculator</b><span class="muted">منافع معلوم کریں</span></button>
+<button class="tile" onclick="show('game')">🎮<b>Learning Game</b><span class="muted">کھیل کے ذریعے سیکھیں</span></button>
+<button class="tile" onclick="show('guide')">📚<b>Guidelines</b><span class="muted">اہم کاروباری احتیاطیں</span></button>
+</div></div>
+<div class="card"><b>🌍 Global Business Library</b><p class="muted">Food، Fashion، Technology، Agriculture، Services، Retail اور بہت سے شعبے۔</p><button class="btn" onclick="show('library')">Library کھولیں</button></div>
+</section>
+
+<section id="library" class="screen">
+<div class="card"><h2 id="libraryTitle">🌍 Business Library</h2><input id="search" placeholder="🔎 کاروبار تلاش کریں... مثلاً bakery, mobile, poultry" oninput="renderBusinesses()"><div id="cats" class="row"></div><p id="count" class="muted"></p></div>
+<div id="businesses"></div>
+</section>
+
+<section id="detail" class="screen"><div id="detailBox"></div></section>
+
+<section id="advisor" class="screen">
+<div class="card"><h2 id="advisorTitle">🤖 Smart Business Advisor</h2><label>آپ کا بجٹ (Rs.)</label><input id="abudget" type="number" placeholder="مثلاً 100000">
+<label>کاروبار کی قسم</label><select id="atype"><option>Food</option><option>Clothing</option><option>Technology</option><option>Digital Services</option><option>Agriculture</option><option>Retail</option><option>Home & Services</option><option>General</option></select>
+<label>تجربہ</label><select id="aexp"><option>Beginner</option><option>Some experience</option><option>Experienced</option></select>
+<label>وقت</label><select id="atime"><option>Part-time</option><option>Full-time</option></select>
+<button class="btn" id="advisorSubmit" onclick="advisor()">میرا Business Plan بنائیں</button><div id="advisorResult"></div></div>
+</section>
+
+<section id="plan" class="screen">
+<div class="card"><h2 id="planTitle">📋 My Business Plan</h2>
+<label>Business Name</label><input id="pname" placeholder="مثلاً My Bakery">
+<label>کیا بیچیں گے؟</label><input id="pproduct" placeholder="مثلاً Cakes & Cupcakes">
+<label>Target Customers</label><input id="pcustomer" placeholder="مثلاً Families, Students">
+<label>Starting Budget (Rs.)</label><input id="pbudget" type="number" placeholder="50000">
+<label>Marketing Plan</label><textarea id="pmarketing" placeholder="Facebook, WhatsApp, local promotion..."></textarea>
+<button class="btn" id="makePlanBtn" onclick="makePlan()">Plan تیار کریں</button><div id="planResult"></div></div>
+</section>
+
+<section id="profit" class="screen">
+<div class="card"><h2 id="profitTitle">💰 Profit Calculator</h2><label>Monthly Sales (Rs.)</label><input id="sales" type="number" placeholder="100000">
+<label>Monthly Expenses (Rs.)</label><input id="expenses" type="number" placeholder="60000">
+<button class="btn green" id="calcProfitBtn" onclick="calcProfit()">Profit نکالیں</button><div id="profitResult"></div></div>
+</section>
+
+<section id="game" class="screen">
+<div class="card"><h2 id="gameTitle">🎮 Business Journey</h2><p>آپ ایک چھوٹا Home Bakery شروع کر رہے ہیں۔ ہر دن ایک فیصلہ کریں۔</p>
+<div id="gameBox"></div></div>
+</section>
+
+<section id="guide" class="screen">
+<div class="card"><h2 id="guideTitle">📚 Business Guidelines</h2>
+<h3>💵 Finance</h3><p>اپنا بجٹ، فروخت اور اخراجات لکھ کر رکھیں۔ قرض لینے سے پہلے repayment، fees اور total cost سمجھیں۔</p>
+<h3>📦 Stock</h3><p>شروع میں ضرورت سے زیادہ stock نہ لیں۔ پہلے demand کو چھوٹے پیمانے پر test کریں۔</p>
+<h3>🤝 Partnerships</h3><p>شراکت داری، ادائیگی اور ذمہ داریوں کی شرائط تحریری شکل میں رکھیں۔</p>
+<h3>📈 Expansion</h3><p>صرف sales بڑھنے پر فوراً expansion نہ کریں؛ cash flow دوبارہ calculate کریں۔</p>
+<h3>⚠️ اہم نوٹ</h3><p class="muted">یہ عمومی تعلیمی رہنمائی ہے، financial/legal advice نہیں۔ مقامی قوانین، licenses اور tax requirements الگ سے چیک کریں۔</p>
+</div></section>
+
+</main>
+<div class="nav">
+<button onclick="show('home')" id="n-home">🏠<br><span id="navHome">Home</span></button>
+<button onclick="show('library')" id="n-library">🔎<br><span id="navIdeas">Ideas</span></button>
+<button onclick="show('profit')" id="n-profit">💰<br><span id="navProfit">Profit</span></button>
+<button onclick="show('advisor')" id="n-advisor">🤖<br><span id="navAdvisor">Advisor</span></button>
+<button onclick="show('game')" id="n-game">🎮<br><span id="navGame">Game</span></button>
+</div>
+</div>
+
+<script>
+const B=[
+["Home Bakery","Food","Rs.30,000–80,000","Cakes, cupcakes and baked items","Oven, ingredients, packaging","WhatsApp + Facebook"],
+["Catering Service","Food","Rs.50,000–200,000","Meals for events and offices","Kitchen setup, containers","Local event promotion"],
+["Fast Food Stall","Food","Rs.80,000–250,000","Burgers, fries and snacks","Stall, fryer, supplies","Location + social media"],
+["Food Truck","Food","Rs.800,000+","Mobile food business","Vehicle, kitchen equipment","Events + social media"],
+["Tiffin Service","Food","Rs.30,000–100,000","Home-cooked meal delivery","Kitchen, boxes, delivery","Office/student groups"],
+["Juice Bar","Food","Rs.100,000–300,000","Fresh juices and shakes","Blender, counter, supplies","Nearby offices/schools"],
+["Coffee Shop","Food","Rs.300,000+","Coffee and light snacks","Coffee equipment, seating","Local branding"],
+["Ice Cream Shop","Food","Rs.150,000–500,000","Ice cream and desserts","Freezer, counter","Family-area promotion"],
+["Pickle Business","Food","Rs.20,000–80,000","Homemade pickles","Ingredients, jars","Online/local sales"],
+["Spice Business","Food","Rs.30,000–100,000","Packaged spices","Grinder, packaging","Retail + online"],
+["Online Clothing Store","Fashion","Rs.50,000–200,000","Clothes sold online","Stock, phone, packaging","Instagram + WhatsApp"],
+["Tailoring Shop","Fashion","Rs.50,000–150,000","Stitching and alterations","Sewing machines","Local customers"],
+["Abaya Store","Fashion","Rs.80,000–300,000","Abayas and modest wear","Stock, display","Social media"],
+["Hijab Store","Fashion","Rs.30,000–120,000","Hijabs and accessories","Stock, packaging","Instagram/WhatsApp"],
+["Kids Clothing","Fashion","Rs.50,000–200,000","Children's clothes","Stock, display","Parent groups"],
+["Embroidery Service","Fashion","Rs.30,000–150,000","Custom embroidery","Machine/materials","Tailors + online"],
+["Handmade Jewelry","Beauty","Rs.15,000–80,000","Handmade jewelry","Beads, tools, packaging","Instagram + gift shops"],
+["Perfume Business","Beauty","Rs.30,000–150,000","Perfume retail/refill","Bottles, oils, labels","Samples + social media"],
+["Beauty Salon","Beauty","Rs.150,000–500,000","Beauty and grooming services","Equipment, space","Local referrals"],
+["Makeup Artist","Beauty","Rs.50,000–200,000","Event/bridal makeup","Kit, lighting","Portfolio + referrals"],
+["Mobile Accessories","Technology","Rs.80,000–250,000","Cases, chargers, accessories","Stock, display","Market/shop + online"],
+["Mobile Repair","Technology","Rs.50,000–200,000","Phone repair service","Tools, spare parts","Local shop + referrals"],
+["Computer Repair","Technology","Rs.50,000–200,000","PC/laptop repair","Tools, diagnostic software","Local SEO/social media"],
+["Graphic Design","Digital Services","Rs.20,000–100,000","Design services","Computer/software","Freelance platforms"],
+["Video Editing","Digital Services","Rs.30,000–150,000","Video editing service","Computer/software","Creator outreach"],
+["Web Development","Digital Services","Rs.30,000–150,000","Websites for clients","Computer, internet","Portfolio + referrals"],
+["App Development","Digital Services","Rs.50,000–250,000","Apps for clients","Computer/software","Portfolio + networking"],
+["Digital Marketing Agency","Digital Services","Rs.30,000–150,000","Social media and ads","Computer, tools","Business outreach"],
+["Online Tutoring","Education","Rs.10,000–50,000","Teach online","Phone/computer, internet","Student referrals"],
+["Tuition Academy","Education","Rs.50,000–200,000","Local tuition classes","Room, boards, materials","Local promotion"],
+["Online Course Business","Education","Rs.20,000–100,000","Recorded/live courses","Camera, mic, platform","Content marketing"],
+["Bookstore","Retail","Rs.150,000–500,000","Books and stationery","Stock, shelves","Schools + local area"],
+["Printing Shop","Retail","Rs.150,000–600,000","Printing and copying","Printer, computer","Schools/offices"],
+["Customized Gifts","Retail","Rs.30,000–150,000","Personalized gifts","Printer/tools, packaging","Instagram + events"],
+["Candle Making","Home & Crafts","Rs.20,000–80,000","Decorative candles","Wax, molds, fragrance","Online gift market"],
+["Soap Making","Home & Crafts","Rs.30,000–100,000","Handmade soaps","Ingredients, molds","Online + boutiques"],
+["Gift Basket Business","Home & Crafts","Rs.20,000–80,000","Curated gift baskets","Packaging, supplies","Seasonal marketing"],
+["Plant Nursery","Agriculture","Rs.50,000–250,000","Plants and gardening items","Plants, pots, space","Local gardeners"],
+["Poultry Farm","Agriculture","Rs.150,000–700,000","Chicken/egg production","Birds, shelter, feed","Local buyers"],
+["Dairy Farm","Agriculture","Rs.300,000+","Milk production","Animals, shelter, feed","Local customers"],
+["Fish Farming","Agriculture","Rs.200,000+","Fish production","Pond, fingerlings, feed","Wholesale/local market"],
+["Beekeeping","Agriculture","Rs.80,000–300,000","Honey production","Hives, equipment","Direct sales"],
+["Mushroom Farming","Agriculture","Rs.50,000–200,000","Mushroom cultivation","Growing room, substrate","Restaurants + markets"],
+["Vegetable Farming","Agriculture","Rs.50,000–300,000","Fresh vegetables","Land, seeds, irrigation","Local markets"],
+["Fruit Nursery","Agriculture","Rs.50,000–250,000","Fruit plants/seedlings","Land, plants","Farmers + gardeners"],
+["Car Wash","Automotive","Rs.150,000–500,000","Vehicle cleaning","Pressure washer, space","Local location"],
+["Auto Repair Shop","Automotive","Rs.200,000–800,000","Vehicle repair","Tools, workshop","Local referrals"],
+["Motorcycle Repair","Automotive","Rs.100,000–400,000","Bike repair","Tools, spare parts","Local riders"],
+["Car Detailing","Automotive","Rs.100,000–400,000","Deep vehicle cleaning","Tools, products","Before/after social posts"],
+["Delivery Service","Logistics","Rs.100,000–500,000","Local delivery","Bike/vehicle, phone","Business partnerships"],
+["Courier Service","Logistics","Rs.200,000+","Parcel delivery","Vehicles, tracking","Online stores"],
+["Moving Service","Logistics","Rs.300,000+","House/office moving","Vehicle, equipment","Local listings"],
+["Taxi/Ride Service","Transport","Rs.500,000+","Passenger transport","Vehicle, license","Local demand"],
+["Small Warehouse","Logistics","Rs.300,000+","Storage service","Space, racks","E-commerce sellers"],
+["Cleaning Service","Home & Services","Rs.30,000–150,000","Home/office cleaning","Cleaning supplies","Local referrals"],
+["Plumbing Service","Home & Services","Rs.30,000–120,000","Plumbing repairs","Tools, transport","Local listings"],
+["Electrician Service","Home & Services","Rs.30,000–120,000","Electrical work","Tools, safety gear","Local referrals"],
+["AC Repair Service","Home & Services","Rs.50,000–200,000","AC installation/repair","Tools, training","Seasonal promotion"],
+["Interior Design","Construction","Rs.30,000–150,000","Interior planning","Computer, software","Portfolio"],
+["Painting Service","Construction","Rs.50,000–200,000","House/office painting","Tools, workers","Before/after portfolio"],
+["Furniture Workshop","Manufacturing","Rs.200,000–800,000","Custom furniture","Tools, workspace","Showroom + social media"],
+["Woodworking","Manufacturing","Rs.150,000–600,000","Wood products","Tools, wood","Custom orders"],
+["Metal Workshop","Manufacturing","Rs.200,000–800,000","Metal fabrication","Tools, safety gear","Contractors + local"],
+["Packaging Business","Manufacturing","Rs.150,000–700,000","Boxes/bags/packaging","Machines/materials","B2B outreach"],
+["T-shirt Printing","Manufacturing","Rs.80,000–300,000","Custom printed shirts","Printer/press, blanks","Schools + events"],
+["Bakery Ingredients Supply","Wholesale","Rs.100,000–500,000","Ingredients for bakeries","Inventory, storage","B2B bakery outreach"],
+["Grocery Store","Retail","Rs.300,000+","Daily household goods","Stock, shelves","Neighborhood delivery"],
+["Mini Mart","Retail","Rs.500,000+","Convenience retail","Stock, shelves, POS","Local convenience"],
+["Electronics Store","Retail","Rs.300,000+","Electronic products","Inventory, display","Online + local"],
+["Hardware Store","Retail","Rs.300,000+","Tools and hardware","Inventory, shelves","Contractor relationships"],
+["Pharmacy Retail","Healthcare Retail","Varies","Medicines and health products","Licensed setup, stock","Local area","Regulated: follow local laws"],
+["Travel Agency","Travel","Rs.100,000–500,000","Travel planning and booking","Office/website, supplier links","Online marketing"],
+["Tour Guide Service","Travel","Rs.20,000–100,000","Guided local tours","Training, transport links","Tourism platforms"],
+["Guest House","Hospitality","Rs.1,000,000+","Short-stay accommodation","Property, furnishings","Booking platforms"],
+["Event Decoration","Events","Rs.100,000–500,000","Wedding/event decoration","Decor stock, transport","Event planners"],
+["Photography Service","Media","Rs.100,000–500,000","Events and product photography","Camera, lighting","Portfolio + referrals"],
+["Content Creation","Media","Rs.30,000–150,000","Videos/social content","Phone/camera, mic","Social platforms"],
+["Podcast Studio","Media","Rs.100,000–400,000","Podcast recording space","Mic, camera, room","Creator partnerships"],
+["Music Production","Media","Rs.100,000–500,000","Audio production","Computer, interface, mic","Artist networking"],
+["Online Marketplace Seller","E-commerce","Rs.30,000–200,000","Sell products online","Stock, phone, packaging","Marketplace + social"],
+["Dropshipping Store","E-commerce","Rs.30,000–150,000","Online product selling","Store, supplier research","Digital ads/content"],
+["Subscription Box","E-commerce","Rs.50,000–250,000","Recurring themed boxes","Products, packaging","Subscriptions + social"],
+["Pet Supplies Store","Retail","Rs.100,000–400,000","Pet food/accessories","Inventory","Pet-owner communities"],
+["Laundry Service","Personal Services","Rs.200,000–700,000","Wash/iron services","Machines, space","Pickup/delivery"],
+["Virtual Assistant Service","Professional","Rs.20,000–100,000","Remote admin support","Computer, internet","Freelance platforms"],
+["Bookkeeping Service","Professional","Rs.20,000–100,000","Bookkeeping for businesses","Computer/software","B2B outreach"],
+["Business Consultancy","Professional","Rs.30,000–150,000","Business guidance","Computer, expertise","Professional network"],
+["Recruitment Service","Professional","Rs.50,000–200,000","Hiring support","Computer, database","Employer outreach"],
+["Translation Service","Professional","Rs.10,000–80,000","Language translation","Computer, language skills","Freelance platforms"],
+["Legal Consultancy","Professional","Varies","Legal services","Qualifications/license","Professional network","Regulated: follow local law"],
+["Architecture Studio","Professional","Varies","Architectural design","Software, qualifications","Portfolio","Regulated where applicable"],
+["Real Estate Agency","Real Estate","Rs.50,000–300,000","Property sales/rentals","Office/phone, listings","Property networks"],
+["Property Management","Real Estate","Rs.50,000–250,000","Manage rental properties","Software, staff","Property owners"],
+["Solar Installation","Energy","Rs.200,000–800,000","Solar system installation","Tools, training","Local demand + referrals"],
+["Solar Product Retail","Energy","Rs.200,000–800,000","Solar panels/inverters","Inventory, supplier links","Local + online"],
+["Recycling Collection","Environmental","Rs.100,000–400,000","Collect recyclable materials","Vehicle, storage","B2B collection"],
+["Water Purification Service","Environmental","Rs.200,000–800,000","Purified water supply","Purification equipment","Local subscriptions"],
+["Childcare Service","Personal Services","Varies","Childcare services","Safe facility, staff","Local families","Regulated: follow local requirements"],
+["Fitness Studio","Health & Fitness","Rs.300,000+","Exercise classes","Equipment, space","Local memberships"],
+["Personal Training","Health & Fitness","Rs.50,000–200,000","Fitness coaching","Training, basic equipment","Social media + referrals"],
+["Sports Coaching","Health & Fitness","Rs.30,000–150,000","Sports lessons","Venue/equipment","Schools + clubs"],
+["Game Development","Technology","Rs.50,000–300,000","Create digital games","Computer/software","Game stores + social"],
+["Online Gaming Community","Technology","Rs.20,000–100,000","Gaming community/events","Internet, moderation","Community platforms"],
+["3D Printing Service","Technology","Rs.150,000–500,000","Print custom objects","3D printer, materials","Engineering/student groups"],
+["Repair & Refurbish Shop","Technology","Rs.100,000–400,000","Repair/resell devices","Tools, parts","Local + online"],
+["Vending Machine Business","Retail","Rs.200,000–800,000","Automated product sales","Machine, stock, locations","High-footfall locations"],
+["Laundry Detergent Production","Manufacturing","Rs.100,000–500,000","Cleaning product production","Equipment, ingredients","Retail + B2B"],
+["Bakery Packaging","Manufacturing","Rs.100,000–500,000","Packaging for bakeries","Materials, printing","B2B outreach"],
+["Resume Writing Service","Digital Services","Rs.10,000–70,000","CV/resume preparation","Computer, templates","Student/job groups"],
+["Social Media Management","Digital Services","Rs.20,000–100,000","Manage business social pages","Computer, design tools","Business outreach"],
+["Email Marketing Service","Digital Services","Rs.20,000–100,000","Email campaigns","Software, computer","B2B outreach"],
+["Market Research Service","Professional","Rs.20,000–120,000","Research customers/markets","Computer, survey tools","B2B networking"]
+];
+
+const cats=["All",...new Set(B.map(x=>x[1]))]; let activeCat="All";
+function show(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));
+ const n=document.getElementById("n-"+id); if(n)n.classList.add("active");
+ if(id==="library")renderBusinesses();
+ if(id==="game")startGame();
+ scrollTo(0,0);
+}
+function renderCats(){
+ const el=document.getElementById("cats");
+ el.innerHTML=cats.map(c=>`<button class="btn ${c===activeCat?'':'alt'}" onclick="activeCat='${c.replace(/'/g,"\\'")}';renderBusinesses()">${c}</button>`).join("");
+}
+function renderBusinesses(){
+ renderCats();
+ const q=(document.getElementById("search")?.value||"").toLowerCase().trim();
+ const arr=B.filter(x=>(activeCat==="All"||x[1]===activeCat)&&x.join(" ").toLowerCase().includes(q));
+ document.getElementById("count").textContent=`${arr.length} businesses found`;
+ document.getElementById("businesses").innerHTML=arr.map((x,i)=>`<div class="card business" onclick="openBusiness(${B.indexOf(x)})"><span class="badge">${x[1]}</span><h3>${x[0]}</h3><div class="price">${x[2]}</div><p class="muted">${x[3]}</p></div>`).join("")||`<div class="card center"><h3>😕 کاروبار نہیں ملا</h3><p class="muted">دوسرا لفظ یا category آزمائیں۔</p></div>`;
+}
+function openBusiness(i){
+ const x=B[i];
+ document.getElementById("detailBox").innerHTML=`<div class="card"><button class="btn alt" onclick="show('library')">← واپس</button><h2>${x[0]}</h2><span class="badge">${x[1]}</span><p><b>💰 Starting Budget:</b> ${x[2]}</p><p><b>📌 کاروبار:</b> ${x[3]}</p><p><b>🧰 ضروری چیزیں:</b> ${x[4]}</p><p><b>📣 Marketing:</b> ${x[5]}</p><hr><h3>اس کاروبار کے لیے Business Dost tools</h3><div class="grid"><button class="tile" onclick="prefillPlan(${i})">📋 Plan</button><button class="tile" onclick="prefillProfit()">💰 Profit</button><button class="tile" onclick="show('advisor')">🤖 Advisor</button><button class="tile" onclick="show('game')">🎮 Game</button></div><p class="small muted">Budget اور profit مثالیں ہیں؛ اصل لاگت اور آمدنی جگہ، scale، demand اور business model کے مطابق بدل سکتی ہے۔</p></div>`;
+ show('detail');
+}
+function prefillPlan(i){let x=B[i];show('plan');document.getElementById("pname").value=x[0];document.getElementById("pproduct").value=x[3];document.getElementById("pbudget").value=(x[2].match(/\d[\d,]*/)||[""])[0].replace(/,/g,"");}
+function prefillProfit(){show('profit');document.getElementById("sales").focus();}
+function advisor(){
+ const budget=Number(document.getElementById("abudget").value)||0, type=document.getElementById("atype").value, exp=document.getElementById("aexp").value, time=document.getElementById("atime").value;
+ let pool=B.filter(x=>type==="General"||x[1]===type);
+ if(!pool.length)pool=B;
+ const affordable=budget?pool.filter(x=>{let m=(x[2].match(/\d[\d,]*/)||["0"])[0].replace(/,/g,"");return Number(m)<=budget*1.15}):pool;
+ const x=(affordable[0]||pool[0]);
+ const reserve=Math.round(budget*.2), setup=Math.round(budget*.5), marketing=Math.round(budget*.1), working=budget-setup-marketing-reserve;
+ document.getElementById("advisorResult").innerHTML=`<div class="result"><h3>💡 Suggested Business: ${x[0]}</h3><p>${x[3]}</p><p><b>Budget:</b> ${budget?`Rs.${budget.toLocaleString()}`:"اپنا بجٹ درج کریں"} </p>${budget?`<p>Setup ${setup.toLocaleString()} + Marketing ${marketing.toLocaleString()} + Working Capital ${working.toLocaleString()} + Reserve ${reserve.toLocaleString()}</p>`:""}<p><b>Marketing:</b> ${x[5]}</p><p><b>آپ کی profile:</b> ${exp}, ${time}</p><p>شروع میں demand کو چھوٹے پیمانے پر test کریں اور sales/expenses record کریں۔</p></div>`;
+}
+function makePlan(){
+ const n=document.getElementById("pname").value||"My Business", product=document.getElementById("pproduct").value||"Your product/service", c=document.getElementById("pcustomer").value||"Local customers", b=Number(document.getElementById("pbudget").value)||0, m=document.getElementById("pmarketing").value||"WhatsApp, Facebook/Instagram, referrals";
+ document.getElementById("planResult").innerHTML=`<div class="result"><h3>📋 ${n}</h3><p><b>Product/Service:</b> ${product}</p><p><b>Customers:</b> ${c}</p><p><b>Starting Budget:</b> Rs.${b.toLocaleString()}</p><p><b>Marketing:</b> ${m}</p><p><b>First 30 Days:</b> 1) demand test 2) basic setup 3) first customers 4) collect feedback 5) calculate profit.</p><p><b>Revenue Plan:</b> sales target لکھیں، ہر sale کا cost معلوم کریں، پھر margin دیکھیں۔</p></div>`;
+}
+function calcProfit(){
+ const s=Number(document.getElementById("sales").value)||0,e=Number(document.getElementById("expenses").value)||0,p=s-e,margin=s?((p/s)*100):0;
+ document.getElementById("profitResult").innerHTML=`<div class="result"><h3 class="${p>=0?'success':'danger'}">${p>=0?'Net Profit':'Net Loss'}: Rs.${Math.abs(p).toLocaleString()}</h3><p>Profit Margin: ${margin.toFixed(1)}%</p><div class="bar"><span style="width:${Math.min(100,Math.max(0,margin))}%"></span></div></div>`;
+}
+let g={day:1,cash:50000,score:0};
+const qs=[
+["Day 1 — Setup","آپ کے پاس Rs.50,000 ہیں۔ کیا کریں؟",["A: سارا پیسہ decoration پر","B: basic equipment + ingredients، کچھ reserve","C: پہلے ہی بڑا shop لیں"],[0,10,-10]],
+["Day 2 — Pricing","آپ product کی قیمت کیسے رکھیں؟",["A: cost معلوم کیے بغیر","B: cost + مناسب margin + market check","C: competitor سے ہمیشہ آدھی"],[ -5,10,-5]],
+["Day 3 — Marketing","پہلے customers کیسے لائیں؟",["A: کسی کو نہ بتائیں","B: samples + WhatsApp/social media","C: بغیر سوچے مہنگا ad"],[-5,10,-5]],
+["Day 4 — Stock","Sales ابھی کم ہیں۔",["A: بہت زیادہ stock خریدیں","B: چھوٹا stock رکھیں اور demand دیکھیں","C: record رکھنا چھوڑ دیں"],[-5,10,-10]],
+["Day 5 — Growth","کچھ profit آیا ہے۔",["A: سارا profit خرچ","B: کچھ reinvest، کچھ reserve","C: فوراً بڑا قرض"],[-5,10,-10]]
+];
+function startGame(){if(g.day>5)g={day:1,cash:50000,score:0}; renderGame();}
+function renderGame(){
+ const q=qs[g.day-1]; if(!q){document.getElementById("gameBox").innerHTML=`<div class="result center"><h2>🎉 Journey Complete!</h2><p>Score: ${g.score}</p><p>Remaining Cash: Rs.${g.cash.toLocaleString()}</p><p>سبق: business میں budgeting، pricing، marketing، stock control اور cash reserve اہم ہیں۔</p><button class="btn" onclick="g={day:1,cash:50000,score:0};renderGame()">دوبارہ کھیلیں</button></div>`;return;}
+ document.getElementById("gameBox").innerHTML=`<p><b>${q[0]}</b></p><p>${q[1]}</p>${q[2].map((c,i)=>`<button class="choice" onclick="answerGame(${i})">${c}</button>`).join("")}<p class="muted">💵 Cash: Rs.${g.cash.toLocaleString()} | ⭐ Score: ${g.score}</p>`;
+}
+function answerGame(i){const q=qs[g.day-1],delta=q[3][i];g.score+=delta;g.cash+=delta*500;alert(i===1?"✅ اچھا فیصلہ! یہی بنیادی سبق ہے۔":"💡 یہ فیصلہ دوبارہ سوچیں: cost، demand اور cash reserve کو اہمیت دیں۔");g.day++;renderGame();}
+
+const LANG={
+ en:{tagline:'Find business ideas, plan, learn and grow',splash:'Your Business Journey Starts Here',loading:'Loading your business tools…',settings:'⚙ Settings',language:'App language',appearance:'Appearance',note:'Your language and appearance preferences are saved on this device.',save:'Save settings',welcome:'👋 Welcome!',prompt:'What would you like to start with?',library:'🌍 Business Library',advisor:'🤖 Smart Business Advisor',plan:'📋 My Business Plan',profit:'💰 Profit Calculator',game:'🎮 Business Journey',guide:'📚 Business Guidelines',home:'Home',ideas:'Ideas',profitNav:'Profit',advisorNav:'Advisor',gameNav:'Game',advisorBtn:'Create my business plan',makePlan:'Generate plan',calcProfit:'Calculate profit',search:'🔎 Search businesses… e.g. bakery, mobile, poultry'},
+ ur:{tagline:'کاروبار تلاش کریں، سمجھیں، پلان بنائیں اور سیکھیں',splash:'آپ کے کاروبار کے سفر کی شروعات',loading:'کاروباری ٹولز لوڈ ہو رہے ہیں…',settings:'⚙ ترتیبات',language:'ایپ کی زبان',appearance:'ظاہری انداز',note:'زبان اور تھیم کی پسند اسی ڈیوائس پر محفوظ ہوگی۔',save:'ترتیبات محفوظ کریں',welcome:'👋 خوش آمدید!',prompt:'آپ کس چیز سے شروع کرنا چاہتے ہیں؟',library:'🌍 کاروباری لائبریری',advisor:'🤖 اسمارٹ بزنس ایڈوائزر',plan:'📋 میرا بزنس پلان',profit:'💰 منافع کیلکولیٹر',game:'🎮 کاروباری سفر',guide:'📚 کاروباری رہنمائی',home:'ہوم',ideas:'آئیڈیاز',profitNav:'منافع',advisorNav:'مشیر',gameNav:'گیم',advisorBtn:'میرا بزنس پلان بنائیں',makePlan:'پلان تیار کریں',calcProfit:'منافع نکالیں',search:'🔎 کاروبار تلاش کریں…'},
+ es:{tagline:'Encuentra ideas, planifica, aprende y crece',splash:'Aquí comienza tu camino empresarial',loading:'Cargando herramientas de negocio…',settings:'⚙ Ajustes',language:'Idioma de la aplicación',appearance:'Apariencia',note:'Tus preferencias se guardan en este dispositivo.',save:'Guardar ajustes',welcome:'👋 ¡Bienvenido!',prompt:'¿Con qué te gustaría empezar?',library:'🌍 Biblioteca de negocios',advisor:'🤖 Asesor inteligente',plan:'📋 Mi plan de negocio',profit:'💰 Calculadora de ganancias',game:'🎮 Aventura empresarial',guide:'📚 Guías de negocio',home:'Inicio',ideas:'Ideas',profitNav:'Ganancias',advisorNav:'Asesor',gameNav:'Juego',advisorBtn:'Crear mi plan de negocio',makePlan:'Generar plan',calcProfit:'Calcular ganancias',search:'🔎 Buscar negocios…'},
+ ar:{tagline:'اكتشف أفكار الأعمال وخطط وتعلّم وتطوّر',splash:'تبدأ رحلتك التجارية من هنا',loading:'جارٍ تحميل أدوات الأعمال…',settings:'⚙ الإعدادات',language:'لغة التطبيق',appearance:'المظهر',note:'يتم حفظ تفضيلاتك على هذا الجهاز.',save:'حفظ الإعدادات',welcome:'👋 أهلاً بك!',prompt:'بماذا تريد أن تبدأ؟',library:'🌍 مكتبة الأعمال',advisor:'🤖 مستشار الأعمال الذكي',plan:'📋 خطة عملي',profit:'💰 حاسبة الأرباح',game:'🎮 رحلة الأعمال',guide:'📚 إرشادات الأعمال',home:'الرئيسية',ideas:'الأفكار',profitNav:'الأرباح',advisorNav:'المستشار',gameNav:'اللعبة',advisorBtn:'أنشئ خطة عملي',makePlan:'إنشاء الخطة',calcProfit:'احسب الربح',search:'🔎 ابحث عن الأعمال…'},
+ fr:{tagline:'Trouvez des idées, planifiez, apprenez et progressez',splash:'Votre aventure entrepreneuriale commence ici',loading:'Chargement des outils professionnels…',settings:'⚙ Paramètres',language:'Langue de l’application',appearance:'Apparence',note:'Vos préférences sont enregistrées sur cet appareil.',save:'Enregistrer',welcome:'👋 Bienvenue !',prompt:'Par quoi souhaitez-vous commencer ?',library:'🌍 Bibliothèque d’entreprises',advisor:'🤖 Conseiller intelligent',plan:'📋 Mon plan d’affaires',profit:'💰 Calculateur de bénéfices',game:'🎮 Parcours entrepreneurial',guide:'📚 Guides professionnels',home:'Accueil',ideas:'Idées',profitNav:'Profit',advisorNav:'Conseiller',gameNav:'Jeu',advisorBtn:'Créer mon plan',makePlan:'Générer le plan',calcProfit:'Calculer le profit',search:'🔎 Rechercher une entreprise…'},
+ de:{tagline:'Geschäftsideen finden, planen, lernen und wachsen',splash:'Hier beginnt deine Geschäftsreise',loading:'Geschäftswerkzeuge werden geladen…',settings:'⚙ Einstellungen',language:'App-Sprache',appearance:'Darstellung',note:'Deine Einstellungen werden auf diesem Gerät gespeichert.',save:'Einstellungen speichern',welcome:'👋 Willkommen!',prompt:'Womit möchtest du beginnen?',library:'🌍 Geschäftsbibliothek',advisor:'🤖 Smart Business-Berater',plan:'📋 Mein Geschäftsplan',profit:'💰 Gewinnrechner',game:'🎮 Geschäftsreise',guide:'📚 Geschäftstipps',home:'Start',ideas:'Ideen',profitNav:'Gewinn',advisorNav:'Berater',gameNav:'Spiel',advisorBtn:'Geschäftsplan erstellen',makePlan:'Plan erstellen',calcProfit:'Gewinn berechnen',search:'🔎 Unternehmen suchen…'},
+ tr:{tagline:'İş fikirleri bul, planla, öğren ve büyü',splash:'İş yolculuğun burada başlıyor',loading:'İş araçları yükleniyor…',settings:'⚙ Ayarlar',language:'Uygulama dili',appearance:'Görünüm',note:'Tercihleriniz bu cihazda kaydedilir.',save:'Ayarları kaydet',welcome:'👋 Hoş geldiniz!',prompt:'Nereden başlamak istersiniz?',library:'🌍 İşletme kütüphanesi',advisor:'🤖 Akıllı iş danışmanı',plan:'📋 İş planım',profit:'💰 Kâr hesaplayıcı',game:'🎮 İş yolculuğu',guide:'📚 İş rehberi',home:'Ana sayfa',ideas:'Fikirler',profitNav:'Kâr',advisorNav:'Danışman',gameNav:'Oyun',advisorBtn:'İş planımı oluştur',makePlan:'Plan oluştur',calcProfit:'Kârı hesapla',search:'🔎 İşletme ara…'}
+};
+function applyLanguage(code){const t=LANG[code]||LANG.en;document.documentElement.lang=code;document.documentElement.dir=code==='ur'||code==='ar'?'rtl':'ltr';
+ const put=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};
+ put('tagline',t.tagline);put('splashTag',t.splash);put('loadingText',t.loading);put('settingsTitle',t.settings);put('languageLabel',t.language);put('themeLabel',t.appearance);put('settingsNote',t.note);put('saveSettingsBtn',t.save);put('welcomeTitle',t.welcome);put('welcomePrompt',t.prompt);put('libraryTitle',t.library);put('advisorTitle',t.advisor);put('planTitle',t.plan);put('profitTitle',t.profit);put('gameTitle',t.game);put('guideTitle',t.guide);put('navHome',t.home);put('navIdeas',t.ideas);put('navProfit',t.profitNav);put('navAdvisor',t.advisorNav);put('navGame',t.gameNav);put('advisorSubmit',t.advisorBtn);put('makePlanBtn',t.makePlan);put('calcProfitBtn',t.calcProfit);const search=document.getElementById('search');if(search)search.placeholder=t.search;
+ const h1=document.querySelector('header h1');if(h1)h1.textContent='💼 Business Dost';localStorage.setItem('bd-language',code);
+}
+function openSettings(){const m=document.getElementById('settingsModal');m.classList.add('open');document.getElementById('languageSelect').value=localStorage.getItem('bd-language')||'ur';document.getElementById('themeSelect').value=document.body.classList.contains('dark')?'dark':'light';}
+function closeSettings(){document.getElementById('settingsModal').classList.remove('open')}
+function saveSettings(){const lang=document.getElementById('languageSelect').value;applyLanguage(lang);const theme=document.getElementById('themeSelect').value;document.body.classList.toggle('dark',theme==='dark');localStorage.setItem('bd-theme',theme);closeSettings();}
+
+// Restore saved preferences.
+try{applyLanguage(localStorage.getItem("bd-language")||"ur");document.body.classList.toggle("dark",localStorage.getItem("bd-theme")==="dark");}catch(e){}
+renderCats();renderBusinesses();
+window.addEventListener("load",()=>setTimeout(()=>document.getElementById("splash")?.classList.add("hide"),1500));
+setTimeout(()=>document.getElementById("splash")?.classList.add("hide"),3500);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSettings();});
+</script>
+</body>
+</html>
